@@ -26,6 +26,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
+    "@types/plantuml-encoder": "^1.4.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
