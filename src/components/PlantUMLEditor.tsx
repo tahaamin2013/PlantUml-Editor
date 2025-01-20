@@ -39,7 +39,7 @@ export default function PlantUMLEditor() {
   
     switch (format) {
       case "png":
-        url = `${PLANTUML_SERVER}/png/${encodedContent}`;
+        url = `${PLANTUML_SERVER}/png/${encodedContent}?scale=2`; // Increase scale
         break;
       case "svg":
         url = `${PLANTUML_SERVER}/svg/${encodedContent}`;
@@ -48,7 +48,7 @@ export default function PlantUMLEditor() {
         url = `${PLANTUML_SERVER}/txt/${encodedContent}`;
         break;
       case "jpg":
-        url = `${PLANTUML_SERVER}/png/${encodedContent}`; // JPG workaround
+        url = `${PLANTUML_SERVER}/png/${encodedContent}?scale=2`; // Increase scale
         break;
       default:
         return;
@@ -59,7 +59,6 @@ export default function PlantUMLEditor() {
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
   
-      // Create a temporary <a> element and trigger download
       const link = document.createElement("a");
       link.href = blobUrl;
       link.download = `diagram.${format}`;
@@ -67,12 +66,12 @@ export default function PlantUMLEditor() {
       link.click();
       document.body.removeChild(link);
   
-      // Clean up blob URL
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("Download failed", error);
     }
   };
+  
   
 
   const handleExtractWindow = () => {
