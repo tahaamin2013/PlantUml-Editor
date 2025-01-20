@@ -39,7 +39,7 @@ export default function PlantUMLEditor() {
   
     switch (format) {
       case "png":
-        url = `${PLANTUML_SERVER}/png/${encodedContent}?scale=9`; // Increase scale
+        url = `${PLANTUML_SERVER}/png/${encodedContent}?dpi=300`;
         break;
       case "svg":
         url = `${PLANTUML_SERVER}/svg/${encodedContent}`;
