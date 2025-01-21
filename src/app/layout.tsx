@@ -6,8 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "PlantUML Editor",
-  description: "A PlantUML editor with light/dark mode and export options",
+  title: "PlantUML Online Editor | Create UML Diagrams & Charts Easily​",
+  description: "PlantUML Editor | uml diagram | uml chart | umls | plant uml online editor | plantuml online",
 }
 
 export default function RootLayout({

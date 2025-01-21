@@ -8,6 +8,12 @@ import {
   Maximize2,
   LayoutGridIcon as LayoutHorizontal,
   LayoutGridIcon as LayoutVertical,
+  Undo,
+  Redo,
+  Search,
+  WrapText,
+  Download,
+  FileCode2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -23,6 +29,10 @@ export default function PlantUMLEditor() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [selectedFormat, setSelectedFormat] = useState<string | null>(null)
+  const [canUndo, setCanUndo] = useState(false)
+  const [canRedo, setCanRedo] = useState(false)
+  const [isWrapMode, setIsWrapMode] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -37,6 +47,19 @@ export default function PlantUMLEditor() {
     handleResize() // Run on mount
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    const updateUndoRedoState = () => {
+      setCanUndo(document.queryCommandEnabled("undo"))
+      setCanRedo(document.queryCommandEnabled("redo"))
+    }
+
+    updateUndoRedoState()
+    document.addEventListener("selectionchange", updateUndoRedoState)
+    return () => {
+      document.removeEventListener("selectionchange", updateUndoRedoState)
+    }
   }, [])
 
   const processContent = (rawContent: string) => {
@@ -128,6 +151,47 @@ export default function PlantUMLEditor() {
     }
   }
 
+  const handleUndo = () => {
+    document.execCommand("undo")
+  }
+
+  const handleRedo = () => {
+    document.execCommand("redo")
+  }
+
+  const handleFind = () => {
+    if (isSearchOpen) {
+      window.find("") // Close the find dialog
+    } else {
+      const searchTerm = prompt("Enter search term:")
+      if (searchTerm) {
+        window.find(searchTerm)
+      }
+    }
+    setIsSearchOpen(!isSearchOpen)
+  }
+
+  const handleWrapMode = () => {
+    setIsWrapMode(!isWrapMode)
+  }
+
+  const handleBackupCode = () => {
+    const blob = new Blob([content], { type: "text/plain" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "plantuml_backup.txt"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleGetDiagramFromAI = () => {
+    // Implement AI diagram generation logic here
+    console.log("Getting diagram from AI...")
+  }
+
   if (!mounted) return null
 
   const encoded = plantumlEncoder.encode(content)
@@ -172,6 +236,84 @@ export default function PlantUMLEditor() {
             </Tooltip>
           </TooltipProvider>
 
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon" onClick={handleUndo} disabled={!canUndo}>
+                  <Undo className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Undo</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon" onClick={handleRedo} disabled={!canRedo}>
+                  <Redo className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Redo</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant={isSearchOpen ? "default" : "outline"} size="icon" onClick={handleFind}>
+                  <Search className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{isSearchOpen ? "Close Find" : "Find"}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon" onClick={handleWrapMode}>
+                  <WrapText className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Toggle Wrap Mode</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon" onClick={handleBackupCode}>
+                  <Download className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Backup Code</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon" onClick={handleGetDiagramFromAI}>
+                  <FileCode2 className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Get Diagram from AI</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
           <Select onValueChange={setSelectedFormat}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Export Format" />
@@ -208,9 +350,12 @@ export default function PlantUMLEditor() {
       >
         <textarea
           value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="flex-1 p-2 border rounded-md font-mono resize-none bg-background text-foreground"
+          onInput={(e) => setContent(e.currentTarget.value)}
+          className={`flex-1 p-2 border rounded-md font-mono resize-none bg-background text-foreground ${
+            isWrapMode ? "whitespace-normal" : "whitespace-nowrap"
+          }`}
           placeholder="Enter PlantUML code here..."
+          wrap={isWrapMode ? "soft" : "off"}
         />
         <div className="flex-[2] border rounded-md overflow-auto h-full bg-white dark:bg-black">
           <img src={url || "/placeholder.svg"} alt="PlantUML Diagram" className="w-full h-full object-contain" />
