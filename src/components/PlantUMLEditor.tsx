@@ -30,15 +30,15 @@ export default function PlantUMLEditor() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 640) {
-        setLayout("vertical");
+        setLayout("vertical")
       }
-    };
-  
-    handleResize(); // Run on mount
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-  
+    }
+
+    handleResize() // Run on mount
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const processContent = (rawContent: string) => {
     let processedContent = rawContent.replace(/!theme\s+\w+/, "")
     processedContent = processedContent.replace(/<&box>/g, "[box]")
@@ -95,6 +95,10 @@ export default function PlantUMLEditor() {
   const handleExtractWindow = () => {
     const newWindow = window.open("", "_blank", "width=800,height=600")
     if (newWindow) {
+      const processedContent = processContent(content)
+      const encodedContent = plantumlEncoder.encode(processedContent)
+      const imageUrl = `${PLANTUML_SERVER}/svg/${encodedContent}`
+
       newWindow.document.write(`
         <html>
           <head>
@@ -120,6 +124,7 @@ export default function PlantUMLEditor() {
           </body>
         </html>
       `)
+      newWindow.document.close()
     }
   }
 
@@ -199,7 +204,7 @@ export default function PlantUMLEditor() {
       </nav>
 
       <div
-        className={`flex ${layout === "vertical" ? "flex-col" : "flex-row"} space-y-4 sm:space-y-0 sm:space-x-4 h-[calc(100vh-120px)]`}
+        className={`flex ${layout === "vertical" ? "flex-col" : "flex-row"} space-y-4 sm:space-y-0 sm:space-x-4 h-[calc(100vh-100px)] w-full`}
       >
         <textarea
           value={content}
@@ -207,7 +212,7 @@ export default function PlantUMLEditor() {
           className="flex-1 p-2 border rounded-md font-mono resize-none bg-background text-foreground"
           placeholder="Enter PlantUML code here..."
         />
-        <div className="flex-1 border rounded-md overflow-auto bg-white dark:bg-gray-800">
+        <div className="flex-[2] border rounded-md overflow-auto h-full bg-white dark:bg-black">
           <img src={url || "/placeholder.svg"} alt="PlantUML Diagram" className="w-full h-full object-contain" />
         </div>
       </div>
