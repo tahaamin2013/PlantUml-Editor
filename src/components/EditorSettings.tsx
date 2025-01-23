@@ -8,19 +8,15 @@ import {
 } from "@/components/ui/select"
 
 interface EditorSettingsProps {
-  onChangeEditorTheme: (theme: string) => void
   onChangeDiagramTheme: (theme: string) => void
   onChangeEditorFontSize: (size: string) => void
-  editorTheme: string
-  diagramTheme: string
+   diagramTheme: string
   editorFontSize: string
 }
 
 export function EditorSettings({
-  onChangeEditorTheme,
   onChangeDiagramTheme,
   onChangeEditorFontSize,
-  editorTheme,
   diagramTheme,
   editorFontSize,
 }: EditorSettingsProps) {

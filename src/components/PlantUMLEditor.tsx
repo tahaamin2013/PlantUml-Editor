@@ -19,7 +19,7 @@ const PLANTUML_SERVER = "https://www.plantuml.com/plantuml"
 
 export default function PlantUMLEditor() {
   const [content, setContent] = useState(`@startuml\nskin rose\nBob -> Alice: Hello!\n@enduml`)
-  const [imageUrl, setImageUrl] = useState("")
+  const [setImageUrl] = useState("")
   const [layout, setLayout] = useState("horizontal")
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
