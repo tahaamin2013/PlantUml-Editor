@@ -165,7 +165,7 @@ export default function PlantUMLEditor() {
     } else {
       const searchTerm = prompt("Enter search term:")
       if (searchTerm) {
-        window.find(searchTerm)
+        document.execCommand("findString", false, searchTerm)
       }
     }
     setIsSearchOpen(!isSearchOpen)
