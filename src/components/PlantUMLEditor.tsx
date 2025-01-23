@@ -8,24 +8,19 @@ import {
   Maximize2,
   LayoutGridIcon as LayoutHorizontal,
   LayoutGridIcon as LayoutVertical,
-  Undo,
-  Redo,
-  Search,
-  WrapText,
-  Download,
-  FileCode2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import plantumlEncoder from "plantuml-encoder"
+import { EditorSidebar } from "./EditorSidebar"
 
 const PLANTUML_SERVER = "https://www.plantuml.com/plantuml"
 
 export default function PlantUMLEditor() {
   const [content, setContent] = useState(`@startuml\nskin rose\nBob -> Alice: Hello!\n@enduml`)
   const [imageUrl, setImageUrl] = useState("")
-  const [layout, setLayout] = useState("horizental")
+  const [layout, setLayout] = useState("horizontal")
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [selectedFormat, setSelectedFormat] = useState<string | null>(null)
@@ -33,14 +28,19 @@ export default function PlantUMLEditor() {
   const [canRedo, setCanRedo] = useState(false)
   const [isWrapMode, setIsWrapMode] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [diagramTheme, setDiagramTheme] = useState("_none_")
+  const [editorFontSize, setEditorFontSize] = useState("12")
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 640) {
         setLayout("vertical")
+      } else {
+        setLayout("horizontal")
       }
     }
 
@@ -192,6 +192,23 @@ export default function PlantUMLEditor() {
     console.log("Getting diagram from AI...")
   }
 
+  const handleChangeDiagramTheme = (theme: string) => {
+    setDiagramTheme(theme)
+    // Update the content to include the new theme
+    setContent((prevContent) => {
+      const themeRegex = /!theme\s+[\w-]+/
+      const newTheme = theme === "_none_" ? "" : `!theme ${theme}`
+      const newContent = themeRegex.test(prevContent)
+        ? prevContent.replace(themeRegex, newTheme)
+        : `${newTheme}\n${prevContent}`
+      return newTheme ? newContent.trim() : newContent.replace(/^\s*[\r\n]/gm, "")
+    })
+  }
+
+  const handleChangeEditorFontSize = (size: string) => {
+    setEditorFontSize(size)
+  }
+
   if (!mounted) return null
 
   const encoded = plantumlEncoder.encode(content)
@@ -236,84 +253,6 @@ export default function PlantUMLEditor() {
             </Tooltip>
           </TooltipProvider>
 
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleUndo} disabled={!canUndo}>
-                  <Undo className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Undo</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleRedo} disabled={!canRedo}>
-                  <Redo className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Redo</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant={isSearchOpen ? "default" : "outline"} size="icon" onClick={handleFind}>
-                  <Search className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{isSearchOpen ? "Close Find" : "Find"}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleWrapMode}>
-                  <WrapText className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Toggle Wrap Mode</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleBackupCode}>
-                  <Download className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Backup Code</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleGetDiagramFromAI}>
-                  <FileCode2 className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Get Diagram from AI</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
           <Select onValueChange={setSelectedFormat}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Export Format" />
@@ -348,15 +287,36 @@ export default function PlantUMLEditor() {
       <div
         className={`flex ${layout === "vertical" ? "flex-col" : "flex-row"} space-y-4 sm:space-y-0 sm:space-x-4 h-[calc(100vh-100px)] w-full`}
       >
-        <textarea
-          value={content}
-          onInput={(e) => setContent(e.currentTarget.value)}
-          className={`flex-1 p-2 border rounded-md font-mono resize-none bg-background text-foreground ${
-            isWrapMode ? "whitespace-normal" : "whitespace-nowrap"
-          }`}
-          placeholder="Enter PlantUML code here..."
-          wrap={isWrapMode ? "soft" : "off"}
-        />
+        <div className="flex">
+          <EditorSidebar
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+            onFind={handleFind}
+            onToggleWrap={handleWrapMode}
+            onBackup={handleBackupCode}
+            onGetAIDiagram={handleGetDiagramFromAI}
+            canUndo={canUndo}
+            canRedo={canRedo}
+            isWrapMode={isWrapMode}
+            isSearchOpen={isSearchOpen}
+            onChangeDiagramTheme={handleChangeDiagramTheme}
+            onChangeEditorFontSize={handleChangeEditorFontSize}
+              diagramTheme={diagramTheme}
+            editorFontSize={editorFontSize}
+          />
+          <textarea
+            value={content}
+            onInput={(e) => setContent(e.currentTarget.value)}
+            className={`flex-1 p-2 border rounded-md font-mono resize-none bg-background text-foreground ${
+              isWrapMode ? "whitespace-normal" : "whitespace-nowrap"
+            }`}
+            style={{
+              fontSize: `${editorFontSize}px`,
+            }}
+            placeholder="Enter PlantUML code here..."
+            wrap={isWrapMode ? "soft" : "off"}
+          />
+        </div>
         <div className="flex-[2] border rounded-md overflow-auto h-full bg-white dark:bg-black">
           <img src={url || "/placeholder.svg"} alt="PlantUML Diagram" className="w-full h-full object-contain" />
         </div>
