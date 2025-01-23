@@ -19,7 +19,7 @@ const PLANTUML_SERVER = "https://www.plantuml.com/plantuml"
 
 export default function PlantUMLEditor() {
   const [content, setContent] = useState(`@startuml\nskin rose\nBob -> Alice: Hello!\n@enduml`)
-  const [setImageUrl] = useState("")
+  const [imageUrl, setImageUrl] = useState("")
   const [layout, setLayout] = useState("horizontal")
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
@@ -161,11 +161,11 @@ export default function PlantUMLEditor() {
 
   const handleFind = () => {
     if (isSearchOpen) {
-      window.find("") // Close the find dialog
+      document.execCommand("unselect") // Close the find dialog
     } else {
       const searchTerm = prompt("Enter search term:")
       if (searchTerm) {
-        window.find(searchTerm)
+        (window as any).find(searchTerm)
       }
     }
     setIsSearchOpen(!isSearchOpen)

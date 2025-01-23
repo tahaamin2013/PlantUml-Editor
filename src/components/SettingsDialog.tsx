@@ -57,7 +57,7 @@ export function EditorSettings({
         <Label htmlFor="font-size" className="text-right">
           Font Size
         </Label>
-        <Select onValueChange={onChangeEditorFontSize} value={editorFontSize} id="font-size" className="col-span-3">
+        <Select onValueChange={onChangeEditorFontSize} value={editorFontSize}>
           <SelectTrigger>
             <SelectValue placeholder="Select size" />
           </SelectTrigger>

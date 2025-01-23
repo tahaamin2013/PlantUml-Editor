@@ -16,10 +16,8 @@ interface EditorSidebarProps {
   isWrapMode: boolean
   isSearchOpen: boolean
   isGeneratingDiagram?: boolean
-  onChangeEditorTheme: (theme: string) => void
   onChangeDiagramTheme: (theme: string) => void
   onChangeEditorFontSize: (size: string) => void
-  editorTheme: string
   diagramTheme: string
   editorFontSize: string
 }
@@ -36,10 +34,8 @@ export function EditorSidebar({
   isWrapMode,
   isSearchOpen,
   isGeneratingDiagram = false,
-  onChangeEditorTheme,
   onChangeDiagramTheme,
   onChangeEditorFontSize,
-  editorTheme,
   diagramTheme,
   editorFontSize,
 }: EditorSidebarProps) {
@@ -128,10 +124,8 @@ export function EditorSidebar({
 
       {showSettings && (
         <EditorSettings
-          onChangeEditorTheme={onChangeEditorTheme}
           onChangeDiagramTheme={onChangeDiagramTheme}
           onChangeEditorFontSize={onChangeEditorFontSize}
-          editorTheme={editorTheme}
           diagramTheme={diagramTheme}
           editorFontSize={editorFontSize}
         />
