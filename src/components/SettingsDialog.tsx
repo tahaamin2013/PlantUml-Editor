@@ -28,8 +28,8 @@ export function EditorSettings({
         <Label htmlFor="diagram-theme" className="text-right">
           Diagram Theme
         </Label>
-        <Select onValueChange={onChangeDiagramTheme} value={diagramTheme} id="diagram-theme" className="col-span-3">
-          <SelectTrigger>
+        <Select onValueChange={onChangeDiagramTheme} value={diagramTheme}>
+          <SelectTrigger className="col-span-3">
             <SelectValue placeholder="Select theme" />
           </SelectTrigger>
           <SelectContent>
