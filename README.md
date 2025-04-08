@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌱 PlantUML Web Editor – Your Ultimate UML Tool
 
-## Getting Started
+🎉 **Finally!** A modern, beautiful, and fast PlantUML Editor built with ❤️ using **Next.js**, **Tailwind CSS**, and **TypeScript**. Say goodbye to boring UML tools!
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔥 Why You'll Love It
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🔄 Live preview while you type
+- 🎨 Customize PlantUML themes on the fly
+- 🖼️ Export to **PNG / SVG / Text**
+- 💾 Auto-save + easy load diagrams
+- ⚡ Built for speed and productivity
+- 🌙 Dark mode included
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Sneak Peek
 
-## Learn More
+![Preview](./public/screenshot.png)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠 Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 🚀 Next.js (App Router)
+- 🎨 Tailwind CSS
+- 🔐 TypeScript
+- 🧠 PlantUML API
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📦 Export Formats
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- ✅ PNG
+- ✅ SVG
+- ✅ Plain Text
+
+---
+
+## 📌 Roadmap (Next Features)
+
+- 🔗 GitHub Gist Integration  
+- 🧠 AI-based Auto-diagram Generator  
+- 🔌 VS Code Extension  
+- ☁️ Cloud Save Feature  
+
+---
+
+## 🧑‍💻 About Me
+
+Hi, I'm **Taha Amin** – a 11-year-old dev building cool things with modern tech!  
+Follow me for projects that mix fun, design & power 👇
+
+> 🔗 [Follow me on GitHub](https://github.com/your-username)  
+> 💬 I love feedback! Open an issue or say hi 😄
+
+---
+
+## 💖 Support the Project
+
+If this helped you or you liked it:
+
+1. ⭐ Star this repo  
+2. 👀 Share with your dev friends  
+3. 🙋 Follow me for more open-source gems
+
+---
+
+## 🧠 Tip for Beginners
+
+Want to learn how this works?  
+Check out the code and start contributing! Pull Requests are welcome 🙌
+
+---
+
+
+## 📜 License
+
+MIT — Free to use, free to modify. Just give credit 🌟
+
