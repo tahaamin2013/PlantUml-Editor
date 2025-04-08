@@ -49,10 +49,9 @@
 
 ## 🧑‍💻 About Me
 
-Hi, I'm **Taha Amin** – a 11-year-old dev building cool things with modern tech!  
+Hi, I'm **Taha Amin** – dev building cool things with modern tech!  
 Follow me for projects that mix fun, design & power 👇
 
-> 🔗 [Follow me on GitHub](https://github.com/your-username)  
 > 💬 I love feedback! Open an issue or say hi 😄
 
 ---
